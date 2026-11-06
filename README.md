@@ -72,7 +72,7 @@ CloudQA_Task2/
 5. Copy `.env.example` to `.env` and add your own Groq API key:
 
    ```env
-   GROQ_API_KEY=your_actual_key
+   GROQ_API_KEY=yourapikey
    GROQ_MODEL=auto
    MAX_STEPS=20
    KEEP_BROWSER_OPEN=true
