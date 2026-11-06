@@ -1,145 +1,58 @@
-# Plain-English Browser Testing Agent
-
-A small AI-assisted browser automation tool that converts a test case written in plain English into browser actions. It uses the Groq API to plan actions and Playwright to interact with the website and verify results.
-
-## Features
-
+Plain-English Browser Testing Agent
+An AI-assisted browser automation tool that converts test cases written in plain English into browser actions. It uses a Groq-hosted AI model to plan actions and Playwright to interact with webpages and verify results.
+Features
 - Accepts a website URL and a plain-English test case.
-- Uses an AI model available through Groq to choose browser actions.
-- Uses Playwright to inspect pages and interact with visible elements.
-- Supports common actions such as clicking, filling fields, selecting options, checking/unchecking controls, waiting, and assertions.
-- Requests credentials in the terminal when needed; credentials are entered locally rather than included in the AI prompt.
-- Produces a timestamped screenshot and JSON test report.
-- Keeps the browser open after the run when configured to do so.
-
-## Technology
-
+- Inspects the current webpage and sends relevant page information to the AI model.
+- Generates browser actions one step at a time.
+- Uses Playwright to click links and buttons, fill fields, select options, interact with checkboxes, and verify expected results.
+- Requests login credentials locally in the terminal when required.
+- Produces a PASS/FAIL summary, a JSON report, and a screenshot.
+Technology
 - Python
-- Groq API
-- Playwright (Chromium)
+- Groq API (AI model)
+- Playwright
+- Chromium
 - python-dotenv
-
-## Project files
-
-```text
-CloudQA_Task2/
-├── test_agent8.py
-├── requirements.txt
-├── README.md
-├── .gitignore
-├── .env.example
-├── .env                 # local only; do not commit or share
-└── test_result_*.png    # generated screenshots
-    test_report_*.json   # generated reports
-```
-
-## Requirements
-
+Requirements
 - Python 3.10 or newer
 - A Groq API key
-- Internet access
-- Windows, macOS, or Linux
-
-## Setup
-
-1. Open a terminal in the project directory.
-2. Create and activate a virtual environment (recommended):
-
-   **Windows PowerShell**
-   ```powershell
-   py -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   ```
-
-   **Windows Command Prompt**
-   ```bat
-   py -m venv .venv
-   .venv\Scripts\activate.bat
-   ```
-
-3. Install Python dependencies:
-
-   ```bash
+- Internet connection
+Setup
+1. Clone or download this repository and open a terminal in the project folder.
+2. Install the dependencies:
    py -m pip install -r requirements.txt
-   ```
-
-4. Install the Playwright Chromium browser:
-
-   ```bash
+3. Install the Playwright Chromium browser:
    py -m playwright install chromium
-   ```
-
-5. Copy `.env.example` to `.env` and add your own Groq API key:
-
-   ```env
-   GROQ_API_KEY=yourapikey
+4. Create a file named .env in the project folder and add your Groq API key:
+   GROQ_API_KEY=your_groq_api_key
    GROQ_MODEL=auto
    MAX_STEPS=20
    KEEP_BROWSER_OPEN=true
-   ```
+   Do not commit or share this file.
+Run
+Start the program:
+py test_agent.py
+When prompted, enter:
+1. The website URL.
+2. The test case in plain English.
+If the test requires authentication, enter the requested credentials in the terminal. The password is entered as hidden input.
 
-   Never commit or share `.env`. The `.gitignore` file excludes it.
 
-## Run
+Approach
+1. The user supplies a URL and a plain-English test case.
+2. The program inspects the page, including its title, visible text, and a limited set of interactive elements.
+3. The page information and test case are sent to the Groq AI model.
+4. The AI returns the next action as JSON.
+5. Python interprets the action and Playwright performs it in the browser.
+6. The program repeats this process until the AI finishes the test or the step limit is reached.
+7. Assertions and the final AI decision are used to produce the test report.
+Element matching uses available page semantics such as accessible roles, labels, placeholders, visible text, and generic fallbacks rather than relying on selectors specific to one website.
 
-```bash
-py test_agent8.py
-```
-
-The program prompts for:
-
-1. Website URL
-2. Plain-English test case
-
-If the requested test requires login, the program may ask for the username/email and password in the terminal.
-
-## Example test cases
-
-**Navigation**
-```text
-Open the Checkboxes page and verify that the page heading "Checkboxes" is displayed.
-```
-
-**Checkbox interaction**
-```text
-Select checkbox 1 and verify that checkbox 1 is checked. Also verify that checkbox 2 remains checked.
-```
-
-**Form submission**
-```text
-Enter "Shammit" into the Text input field. Submit the form and verify that the submission confirmation page displays "Received!".
-```
-
-## Output
-
-After a run, the program writes files in the project directory:
-
-- `test_result_<timestamp>.png` — screenshot of the browser result.
-- `test_report_<timestamp>.json` — structured test report containing the status, reason, final URL, action counts, assertion count, and output file paths.
-
-The browser remains open when `KEEP_BROWSER_OPEN=true`. Press Enter in the terminal to close it.
-
-## Configuration
-
-| Variable | Purpose | Default |
-|---|---|---|
-| `GROQ_API_KEY` | API key used to access Groq | Required |
-| `GROQ_MODEL` | Model name, or `auto` for automatic selection | `auto` |
-| `MAX_STEPS` | Maximum number of AI-planned steps per test | `20` |
-| `KEEP_BROWSER_OPEN` | Keep the browser open after the run | `true` |
-
-## Demonstration coverage
-
-The project was manually exercised against multiple test scenarios on different practice websites, including:
-
-- PHPTravels demo: customer login/dashboard verification and booking lookup interface.
-- The Internet: navigation to the Checkboxes page and checkbox state interaction.
-- Selenium demo web form: text entry, form submission, and confirmation text verification.
-
-These demonstrations show the tested scenarios; they do not guarantee that every arbitrary website or instruction will work. Dynamic websites, CAPTCHAs, MFA, custom controls, authentication restrictions, and ambiguous instructions may require additional handling.
-
-## Security notes
-
-- Keep API keys in `.env`; do not put them in source code.
-- Do not commit `.env` or share screenshots/reports containing personal or sensitive information.
-- Use test accounts and websites where you have permission to automate interactions.
+Limitations
+- The tool depends on the Groq API, an available model, and an internet connection.
+- AI-generated actions can be incorrect, ambiguous, or unsuitable for a particular page.
+- Page inspection is limited to a short portion of page text and a limited number of interactive elements; relevant elements may be missed on large or complex pages.
+- Custom controls, iframes, shadow DOM, CAPTCHAs, MFA, and websites that block browser automation may require additional handling or manual intervention.
+- Element matching is not guaranteed to work on every website or every page structure.
+- The current PASS logic requires an AI-requested PASS and at least one successful assertion. It does not always reject PASS when another action failed, so the action history, screenshot, and report should also be reviewed.
+- The tool has been demonstrated on selected scenarios on PHPTravels, The Internet, and the Selenium demo form. These tests do not prove that it will work for every website or unseen test case.
