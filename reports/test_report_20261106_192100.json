@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "reason": "The page displays 'Received!' confirming the form submission was successful as required by the test.",
+  "final_url": "https://www.selenium.dev/selenium/web/submitted-form.html?my-text=Shammit&my-password=&my-textarea=&my-readonly=Readonly+input&my-select=Open+this+select+menu&my-datalist=&my-file=&my-check=on&my-radio=on&my-colors=%23563d7c&my-date=&my-range=5&my-hidden=",
+  "total_actions": 3,
+  "successful_actions": 3,
+  "failed_actions": 0,
+  "verified_assertions": 1,
+  "started_at": "2026-11-06T19:20:53",
+  "finished_at": "2026-11-06T19:21:00",
+  "history": [
+    {
+      "action": {
+        "action": "fill",
+        "target": "Text input",
+        "value": "Shammit"
+      },
+      "result": "SUCCESS"
+    },
+    {
+      "action": {
+        "action": "click",
+        "target": "Submit"
+      },
+      "result": "SUCCESS"
+    },
+    {
+      "action": {
+        "action": "assert_text",
+        "target": "Received!"
+      },
+      "result": "SUCCESS"
+    }
+  ],
+  "screenshot": "C:\\Users\\shamm\\CloudQA_Task2\\test_result_20261106_192100.png"
+}

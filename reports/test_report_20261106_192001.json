@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "reason": "Checkbox 1 was checked and verified as checked, and checkbox 2 was verified as remaining checked.",
+  "final_url": "https://the-internet.herokuapp.com/checkboxes",
+  "total_actions": 3,
+  "successful_actions": 3,
+  "failed_actions": 0,
+  "verified_assertions": 2,
+  "started_at": "2026-11-06T19:19:54",
+  "finished_at": "2026-11-06T19:20:01",
+  "history": [
+    {
+      "action": {
+        "action": "check",
+        "target": "checkbox 1"
+      },
+      "result": "SUCCESS"
+    },
+    {
+      "action": {
+        "action": "assert_checked",
+        "target": "checkbox 1"
+      },
+      "result": "SUCCESS"
+    },
+    {
+      "action": {
+        "action": "assert_checked",
+        "target": "checkbox 2"
+      },
+      "result": "SUCCESS"
+    }
+  ],
+  "screenshot": "C:\\Users\\shamm\\CloudQA_Task2\\test_result_20261106_192001.png"
+}
